@@ -6,7 +6,7 @@ public class RangeSlider implements _RangeSlider{
     private int Maximum;
     private int Minimum;
 
-    public RangeSlider(int maxCursor, int minCursor, int max, int min) {
+    RangeSlider(int maxCursor, int minCursor, int max, int min) {
         this.MaximumCursor = maxCursor;
         this.MinimumCursor = minCursor;
         this.Maximum = max;
@@ -40,7 +40,7 @@ public class RangeSlider implements _RangeSlider{
 
     @Override
     public int getMaximum() {
-        return this.Maximum;;
+        return this.Maximum;
     }
 
     @Override
@@ -56,5 +56,10 @@ public class RangeSlider implements _RangeSlider{
     @Override
     public boolean checkValues() {
         return getMinimumCursor() < getMaximumCursor();
+    }
+
+    @Override
+    public int barSize() {
+        return getMaximumCursor() - getMinimumCursor();
     }
 }
