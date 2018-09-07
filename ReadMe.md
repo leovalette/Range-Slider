@@ -1,3 +1,3 @@
-AUTHORS : 
-  Quentin FOMBARON
-  Léo VALETTE
+AUTHORS :    
+  Quentin FOMBARON   
+  Léo VALETTE   
