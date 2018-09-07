@@ -13,4 +13,6 @@ public interface _RangeSlider {
     void setMaximum(int max);
 
     boolean checkValues();
+
+    int barSize();
 }
