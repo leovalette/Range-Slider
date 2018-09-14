@@ -11,11 +11,13 @@ public class Main {
 
     public RangeSlider rangeSlider = new RangeSlider(MaximumCursor, MinimumCursor, Maximum, Minimum);
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         JFrame window = new JFrame("Window");
         window.setContentPane(new Window().getSlider1());
+        window.setContentPane(new Window().getPanel1());
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         window.pack();
         window.setVisible(true);
-    }
+
+    }*/
 }
