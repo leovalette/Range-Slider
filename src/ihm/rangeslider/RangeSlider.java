@@ -1,12 +1,14 @@
 package ihm.rangeslider;
 
-public class RangeSlider implements _RangeSlider{
+import javax.swing.*;
+
+public class RangeSlider extends JSlider implements _RangeSlider{
     private int MaximumCursor;
     private int MinimumCursor;
     private int Maximum;
     private int Minimum;
 
-    RangeSlider(int maxCursor, int minCursor, int max, int min) {
+    RangeSlider(int minCursor, int maxCursor, int min, int max) {
         this.MaximumCursor = maxCursor;
         this.MinimumCursor = minCursor;
         this.Maximum = max;
