@@ -1,11 +1,7 @@
 package ihm.rangeslider;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
-
-import javax.swing.*;
 
 public class Main {
 
@@ -28,7 +24,7 @@ public class Main {
 			homeList.add(new Home(randomXCoord, randomYCoord, randomRooms, randomPrice));
 		}
 		
-	    Window win = new Window(homeList);
+	    new Window(homeList);
 		
 		
 	}
