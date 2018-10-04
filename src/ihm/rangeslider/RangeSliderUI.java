@@ -20,6 +20,7 @@ public class RangeSliderUI extends BasicSliderUI {
 
     private transient boolean lowerDragging;
     private transient boolean upperDragging;
+    private transient boolean trackDragging;
 
     RangeSliderUI(RangeSlider b) {
         super(b);
@@ -211,6 +212,7 @@ public class RangeSliderUI extends BasicSliderUI {
                 slider.requestFocus();
             }
 
+            boolean trackpressed = false;
             boolean lowerPressed = false;
             boolean upperPressed = false;
             if (upperThumbSelected || slider.getMinimum() == slider.getValue()) {
@@ -224,6 +226,8 @@ public class RangeSliderUI extends BasicSliderUI {
                     lowerPressed = true;
                 } else if (upperThumbRect.contains(currentMouseX, currentMouseY)) {
                     upperPressed = true;
+                } else if (trackRect.contains(currentMouseX, currentMouseY)) {
+                    trackpressed = true;
                 }
             }
 
@@ -242,12 +246,20 @@ public class RangeSliderUI extends BasicSliderUI {
                 return;
             }
             upperDragging = false;
+
+            if (trackpressed) {
+                offset = currentMouseX - trackRect.x;
+                trackDragging = true;
+                return;
+            }
+            trackDragging = false;
         }
 
         @Override
         public void mouseReleased(MouseEvent e) {
             lowerDragging = false;
             upperDragging = false;
+            trackDragging = false;
             slider.setValueIsAdjusting(false);
             super.mouseReleased(e);
         }
@@ -261,10 +273,12 @@ public class RangeSliderUI extends BasicSliderUI {
             currentMouseX = e.getX();
             currentMouseY = e.getY();
 
-            if (lowerDragging) {
+            if (trackDragging) {
+                slider.setValueIsAdjusting(true);
+                moveTrackThumb();
+            } else if (lowerDragging) {
                 slider.setValueIsAdjusting(true);
                 moveLowerThumb();
-
             } else if (upperDragging) {
                 slider.setValueIsAdjusting(true);
                 moveUpperThumb();
@@ -282,14 +296,8 @@ public class RangeSliderUI extends BasicSliderUI {
             int halfThumbWidth = thumbRect.width / 2;
             int thumbLeft = currentMouseX - offset;
             int trackLeft = trackRect.x;
-            int trackRight = trackRect.x + (trackRect.width - 1);
-            int hMax = xPositionForValue(slider.getValue() + slider.getExtent());
+            int trackRight = xPositionForValue(slider.getValue() + slider.getExtent());
 
-            if (drawInverted()) {
-                trackLeft = hMax;
-            } else {
-                trackRight = hMax;
-            }
             thumbLeft = Math.max(thumbLeft, trackLeft - halfThumbWidth);
             thumbLeft = Math.min(thumbLeft, trackRight - halfThumbWidth);
 
@@ -304,15 +312,9 @@ public class RangeSliderUI extends BasicSliderUI {
 
             int halfThumbWidth = thumbRect.width / 2;
             int thumbLeft = currentMouseX - offset;
-            int trackLeft = trackRect.x;
+            int trackLeft = xPositionForValue(slider.getValue());
             int trackRight = trackRect.x + (trackRect.width - 1);
-            int hMin = xPositionForValue(slider.getValue());
 
-            if (drawInverted()) {
-                trackRight = hMin;
-            } else {
-                trackLeft = hMin;
-            }
             thumbLeft = Math.max(thumbLeft, trackLeft - halfThumbWidth);
             thumbLeft = Math.min(thumbLeft, trackRight - halfThumbWidth);
 
@@ -320,6 +322,12 @@ public class RangeSliderUI extends BasicSliderUI {
 
             thumbMiddle = thumbLeft + halfThumbWidth;
             slider.setExtent(valueForXPosition(thumbMiddle) - slider.getValue());
+        }
+
+        private void moveTrackThumb() {
+            /** TODO
+             * We tried many things, we guess we don't have understand a detail of how it works
+             */
         }
     }
 }
