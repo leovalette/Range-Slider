@@ -1,67 +1,58 @@
+/*
+* We were helped by the RangeSlider code of ernieyu (https://github.com/ernieyu/Swing-range-slider)
+* After several attempts and wrong way taken, we understood how all worked and we tried to do it ourself
+*/
+
 package ihm.rangeslider;
 
 import javax.swing.*;
 
-public class RangeSlider extends JSlider implements _RangeSlider{
-    private int MaximumCursor;
-    private int MinimumCursor;
-    private int Maximum;
-    private int Minimum;
+public class RangeSlider extends JSlider implements _RangeSlider {
 
-    RangeSlider(int minCursor, int maxCursor, int min, int max) {
-        this.MaximumCursor = maxCursor;
-        this.MinimumCursor = minCursor;
-        this.Maximum = max;
-        this.Minimum = min;
+    public RangeSlider(int min, int max, int lower, int upper) {
+        this.setMinimum(min);
+        this.setMaximum(max);
+        this.setValue(lower);
+        this.setUpperValue(upper);
+        setOrientation(HORIZONTAL);
     }
 
     @Override
-    public int getMinimumCursor() {
-        return this.MinimumCursor;
+    public void updateUI() {
+        setUI(new RangeSliderUI(this));
+        updateLabelUIs();
     }
 
     @Override
-    public int getMaximumCursor() {
-        return this.MaximumCursor;
+    public int getValue() {
+        return super.getValue();
     }
 
     @Override
-    public void setMinimumCursor(int min) {
-        this.MinimumCursor = min;
+    public int getUpperValue() {
+        return getValue() + getExtent();
     }
 
     @Override
-    public void setMaximumCursor(int max) {
-        this.MaximumCursor = max;
+    public void setValue(int value) {
+        int oldValue = getValue();
+        if (oldValue == value) {
+            return;
+        }
+
+        int oldExtent = getExtent();
+        int newValue = Math.min(Math.max(getMinimum(), value), oldValue + oldExtent);
+        int newExtent = oldExtent + oldValue - newValue;
+
+        getModel().setRangeProperties(newValue, newExtent, getMinimum(),
+                getMaximum(), getValueIsAdjusting());
     }
 
     @Override
-    public int getMinimum() {
-        return this.Minimum;
-    }
+    public void setUpperValue(int upper) {
+        int lowerValue = getValue();
+        int newExtent = Math.min(Math.max(0, upper - lowerValue), getMaximum() - lowerValue);
 
-    @Override
-    public int getMaximum() {
-        return this.Maximum;
-    }
-
-    @Override
-    public void setMinimum(int min) {
-        this.Minimum = min;
-    }
-
-    @Override
-    public void setMaximum(int max) {
-        this.Maximum = max;
-    }
-
-    @Override
-    public boolean checkValues() {
-        return getMinimumCursor() < getMaximumCursor();
-    }
-
-    @Override
-    public int barSize() {
-        return getMaximumCursor() - getMinimumCursor();
+        setExtent(newExtent);
     }
 }
