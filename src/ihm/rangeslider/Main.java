@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
@@ -20,8 +21,14 @@ public class Main extends JFrame {
 	final static int maxCoord = 500;
 	final static int nbHomes = 20;
 	private static int size = 500;
+	private int dist = 150;
 
 	private static List<Home> homeList = new ArrayList<Home>();
+	private List<Home> correctHomeList = new ArrayList<Home>();
+	private List<Home> otherHomeList = new ArrayList<Home>();
+	RangeSliderDemo rs1 = new RangeSliderDemo(minPrice, maxPrice, 20000, 800000, "Prix :");
+	RangeSliderDemo rs2 = new RangeSliderDemo(minRooms, maxRooms, 2, 8, "Nombre de chambres :");
+	RangeSliderDemo rs3 = new RangeSliderDemo(minCoord, maxCoord, 10, 200, "Distance :");
 
 	public static void main(String[] args) {
 		for (int i = 0; i < nbHomes; i++) {
@@ -34,7 +41,7 @@ public class Main extends JFrame {
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				new Main().setVisible(true);
+				new Main();
 			}
 		});
 		/*
@@ -47,36 +54,29 @@ public class Main extends JFrame {
 
 	public Main() {
 
-		//this.checkCorrectHomes(homeList);
-		//this.setContentPane(new Points(otherHomeList, correctHomeList, size, dist));
-
+		this.checkCorrectHomes(homeList);
 		JFrame main = new JFrame();
-
+		main.setTitle("Homes");
 		main.setResizable(false);
 		main.setLocationRelativeTo(null);
 		main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		main.setContentPane(new Points(otherHomeList, correctHomeList, size, rs3.getRangeSlider().getUpperValue()));
 
 		JPanel slider1 = new JPanel();
 		slider1.setBackground(Color.gray);
-		slider1.setBounds(size+10,20,400,100);
-		slider1.add(new RangeSliderDemo(0, 10, 2, 8, "Rangeslider1"));
-		
+		slider1.setBounds(size + 10, 20, 400, 100);
+		slider1.add(rs1);
+
 		JPanel slider2 = new JPanel();
 		slider2.setBackground(Color.yellow);
-		slider2.setBounds(size+10,120,400,100);
-		slider2.add(new RangeSliderDemo(0, 10, 2, 8, "Rangeslider2"));
-		
+		slider2.setBounds(size + 10, 120, 400, 100);
+		slider2.add(rs2);
+
 		JPanel slider3 = new JPanel();
 		slider3.setBackground(Color.red);
-		slider3.setBounds(size+10,220,400,100);
-		slider3.add(new RangeSliderDemo(0, 10, 2, 8, "Rangeslider3"));
+		slider3.setBounds(size + 10, 220, 400, 100);
+		slider3.add(rs3);
 
-		JPanel window = new JPanel();
-		window.setBackground(Color.blue); 
-		window.setBounds(20,20,size+20,size+20);   
-		//window.add(new Window(homeList));
-
-		main.add(window);
 		main.add(slider1);
 		main.add(slider2);
 		main.add(slider3);
@@ -85,19 +85,21 @@ public class Main extends JFrame {
 		main.setVisible(true);
 	}
 
-	/*public void checkCorrectHomes(List<Home> homeList) {
+	public void checkCorrectHomes(List<Home> homeList) {
 		correctHomeList.clear();
 		otherHomeList.clear();
 		for (int i = 0; i < homeList.size(); i++) {
 			if (Math.abs(homeList.get(i).getCoordX() - size / 2)
-					+ Math.abs(homeList.get(i).getCoordY() - size / 2) <= dist && homeList.get(i).getPrice() >= minPrice
-					&& homeList.get(i).getPrice() <= maxPrice && homeList.get(i).getNbRooms() >= minRooms
-					&& homeList.get(i).getNbRooms() <= maxRooms) {
+					+ Math.abs(homeList.get(i).getCoordY() - size / 2) >= rs3.getRangeSlider().getValue()
+					&& Math.abs(homeList.get(i).getCoordX() - size / 2)
+							+ Math.abs(homeList.get(i).getCoordY() - size / 2) <= rs3.getRangeSlider().getUpperValue()
+					&& homeList.get(i).getPrice() >= rs1.getRangeSlider().getValue() && homeList.get(i).getPrice() <= rs1.getRangeSlider().getUpperValue()
+					&& homeList.get(i).getNbRooms() >= rs2.getRangeSlider().getValue() && homeList.get(i).getNbRooms() <= rs2.getRangeSlider().getUpperValue()) {
 				correctHomeList.add(homeList.get(i));
 			} else {
 				otherHomeList.add(homeList.get(i));
 			}
 		}
-	}*/
+	}
 
 }

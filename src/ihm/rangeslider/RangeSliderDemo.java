@@ -15,6 +15,10 @@ public class RangeSliderDemo extends JPanel {
 
 	private RangeSlider rangeSlider;
 
+	public RangeSlider getRangeSlider() {
+		return rangeSlider;
+	}
+
 	RangeSliderDemo(int min, int max, int lower, int upper, String label) {
 		setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
 		setLayout(new GridBagLayout());
