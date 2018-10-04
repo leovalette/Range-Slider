@@ -19,6 +19,7 @@ public class Window extends JFrame {
 	private int maxRooms = 10;
 
 	private List<Home> correctHomeList = new ArrayList<Home>();
+	private List<Home> otherHomeList = new ArrayList<Home>();
 
 	public Window(List<Home> homeList) throws HeadlessException {
 		JFrame window = new JFrame();
@@ -28,16 +29,21 @@ public class Window extends JFrame {
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	
 		this.checkCorrectHomes(homeList);
-		this.setContentPane(new Points(correctHomeList, size, dist));
+		this.setContentPane(new Points(otherHomeList,correctHomeList, size, dist));
 		this.setVisible(true);
 	}
 	
 	public void checkCorrectHomes(List<Home> homeList) {
+		correctHomeList.clear();
+		otherHomeList.clear();
 		for (int i = 0; i < homeList.size(); i++) {
 			if( Math.abs(homeList.get(i).getCoordX()- size/2) + Math.abs(homeList.get(i).getCoordY()-size/2) <= dist
 					&& homeList.get(i).getPrice() >= minPrice && homeList.get(i).getPrice() <= maxPrice
 					&& homeList.get(i).getNbRooms() >= minRooms && homeList.get(i).getNbRooms() <= maxRooms) {
 				correctHomeList.add(homeList.get(i));
+			}
+			else {
+				otherHomeList.add(homeList.get(i));
 			}
 		}
 	}
