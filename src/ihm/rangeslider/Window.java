@@ -1,42 +1,25 @@
 package ihm.rangeslider;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+import java.awt.HeadlessException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 public class Window extends JFrame {
-    private RangeSlider slider;
-    private JLabel label;
+	private RangeSlider slider;
+	private JLabel label;
+	private List<Home> homeList = new ArrayList<Home>();
 
-    public Window()
-    {
-        super("RangeSlider");
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new Dimension(400, 90));
-        ((JPanel) getContentPane()).setBorder(new EmptyBorder(13, 13, 13, 13) );
-        setLayout(new FlowLayout());
-        slider = new RangeSlider(2, 4, 1, 7);
-        label = new JLabel("MAX : "+ slider.getMaximumCursor());
-        add(label);
-        add(slider);
-        slider.setValue(slider.getMaximumCursor());
-        slider.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent event) {
-                slider.setMaximumCursor(slider.getValue());
-                label.setText("MAX : " + String.valueOf(slider.getMaximumCursor()));
-            }
-        });
-        pack();
-        setLocationRelativeTo(null);
-        setVisible(true);
-        setResizable(false);
-    }
-
-    public static void main(String[] args)
-    {
-        new Window();
-    }
+	public Window(List<Home> homeList) throws HeadlessException {
+		this.homeList = homeList;
+		JFrame window = new JFrame();
+		window.setTitle("Homes");
+		this.setSize(500, 500);
+		this.setLocationRelativeTo(null);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setContentPane(new Point(homeList.get(0).getCoordX(),homeList.get(0).getCoordY()));
+		this.setVisible(true);
+	}
 }
